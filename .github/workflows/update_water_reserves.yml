@@ -2,8 +2,11 @@ name: Update water reserves
 
 on:
   schedule:
-    - cron: "0 9 * * 1-5"   # 12:00 GMT+3, Monday-Friday
+    - cron: "0 9 * * 1-5"
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   update-water-reserves:
@@ -24,7 +27,7 @@ jobs:
           pip install pandas openpyxl requests beautifulsoup4 lxml
 
       - name: Run update script
-        run: python eydap_rss_downloader.py
+        run: python water_reserves.py
 
       - name: Commit updated CSV if changed
         run: |
