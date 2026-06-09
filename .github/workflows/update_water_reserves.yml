@@ -24,7 +24,7 @@ jobs:
           pip install pandas openpyxl requests beautifulsoup4 lxml
 
       - name: Run update script
-        run: python your_script_name.py
+        run: python eydap_rss_downloader.py
 
       - name: Commit updated CSV if changed
         run: |
