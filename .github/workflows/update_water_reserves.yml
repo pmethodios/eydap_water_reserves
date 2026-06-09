@@ -33,6 +33,12 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
           git add water_reserves_latest.csv
-          git diff --cached --quiet || git commit -m "Update water reserves latest CSV"
-          git push
+
+          git diff --cached --quiet && exit 0
+
+          git commit -m "Update water reserves latest CSV"
+
+          git pull --rebase origin main
+          git push origin main
