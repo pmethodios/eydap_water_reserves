@@ -4,8 +4,8 @@ from xml.etree import ElementTree as ET
 from bs4 import BeautifulSoup
 
 
-HISTORICAL_XLSX = "/workspaces/eydap_water_reserves/water_reserves_old.xlsx"
-OUTPUT_CSV = "/workspaces/eydap_water_reserves/water_reserves_latest.csv"
+HISTORICAL_XLSX = "water_reserves_old.xlsx"
+OUTPUT_CSV = "water_reserves_latest.csv"
 
 
 def fetch_eydap_reservoir_rss() -> pd.DataFrame:
