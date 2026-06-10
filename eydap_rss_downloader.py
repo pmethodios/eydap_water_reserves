@@ -4,7 +4,7 @@ from xml.etree import ElementTree as ET
 from bs4 import BeautifulSoup
 
 
-HISTORICAL_XLSX = "water_reserves_old.csv"
+HISTORICAL_CSV = "water_reserves_old.csv"
 OUTPUT_CSV = "water_reserves_latest.csv"
 
 
@@ -65,7 +65,7 @@ def fetch_eydap_reservoir_rss() -> pd.DataFrame:
 
 
 def load_historical_data(path: str) -> pd.DataFrame:
-    df1 = pd.read_excel(path)
+    df1 = pd.read_csv(path)
 
     df1 = df1.rename(columns={
         "date": "Date",
@@ -123,5 +123,5 @@ def build_latest_dataset(historical_path: str, output_csv: str) -> pd.DataFrame:
     return df_clean
 
 
-df = build_latest_dataset(HISTORICAL_XLSX, OUTPUT_CSV)
+df = build_latest_dataset(HISTORICAL_CSV, OUTPUT_CSV)
 print(df.tail(10))
