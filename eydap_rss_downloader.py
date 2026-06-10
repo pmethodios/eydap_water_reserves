@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 
 HISTORICAL_CSV = "water_reserves_old.csv"
 OUTPUT_CSV = "water_reserves_latest.csv"
+LATEST_DAY_COMPARE_CSV = "latest_day_compare.csv"
 
 
 def fetch_eydap_reservoir_rss() -> pd.DataFrame:
@@ -122,6 +123,39 @@ def build_latest_dataset(historical_path: str, output_csv: str) -> pd.DataFrame:
 
     return df_clean
 
+# Compare dates
+def build_latest_day_compare(df: pd.DataFrame, output_csv: str) -> pd.DataFrame:
+    df = df.copy()
+    df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
+    df = df.dropna(subset=["Date"]).sort_values("Date").reset_index(drop=True)
 
+    latest_date = df["Date"].max()
+    latest_month = latest_date.month
+    latest_day = latest_date.day
+
+    compare_df = (
+        df[
+            (df["Date"].dt.month == latest_month) &
+            (df["Date"].dt.day == latest_day)
+        ]
+        .sort_values("Date")
+        .reset_index(drop=True)
+    )
+
+    compare_df.to_csv(output_csv, index=False, date_format="%Y-%m-%d")
+
+    print(f"\nSaved latest-day comparison file to: {output_csv}")
+    print(f"Latest date used for comparison: {latest_date.date()}")
+    print(f"Rows in comparison file: {len(compare_df):,}")
+
+    return compare_df
+
+
+# Execute dataset retrieve and update
 df = build_latest_dataset(HISTORICAL_CSV, OUTPUT_CSV)
+
+# Execute data comparison
+latest_day_compare = build_latest_day_compare(df, LATEST_DAY_COMPARE_CSV)
+
 print(df.tail(10))
+print(latest_day_compare.tail(10))
