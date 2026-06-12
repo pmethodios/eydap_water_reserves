@@ -61,7 +61,9 @@ def fetch_eydap_reservoir_rss() -> pd.DataFrame:
 
     if "Total" in df.columns:
         df = df.drop(columns=["Total"])
-
+    
+    df = df.rename(columns={"Synolo": "Total"})
+  
     return df.reset_index(drop=True)
 
 
