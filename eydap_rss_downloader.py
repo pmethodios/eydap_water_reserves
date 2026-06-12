@@ -71,11 +71,10 @@ def load_historical_data(path: str) -> pd.DataFrame:
     df1 = pd.read_csv(path)
 
     df1 = df1.rename(columns={
-        "date": "Date",
-        "Total": "Synolo",
+        "date": "Date"
     })
 
-    expected_cols = ["Date", "Eyinos", "Marathonas", "Mornos", "Yliki", "Synolo"]
+    expected_cols = ["Date", "Eyinos", "Marathonas", "Mornos", "Yliki", "Total"]
     missing = [col for col in expected_cols if col not in df1.columns]
     if missing:
         raise ValueError(f"Missing expected columns in historical file: {missing}")
@@ -83,7 +82,7 @@ def load_historical_data(path: str) -> pd.DataFrame:
     df1 = df1[expected_cols].copy()
     df1["Date"] = pd.to_datetime(df1["Date"], errors="coerce")
 
-    numeric_cols = ["Eyinos", "Marathonas", "Mornos", "Yliki", "Synolo"]
+    numeric_cols = ["Eyinos", "Marathonas", "Mornos", "Yliki", "Total"]
     for col in numeric_cols:
         df1[col] = pd.to_numeric(df1[col], errors="coerce")
 
@@ -105,7 +104,7 @@ def build_latest_dataset(historical_path: str, output_csv: str) -> pd.DataFrame:
 
     if not duplicate_rows.empty:
         print("Duplicate dates found:")
-        print(duplicate_rows[["Date", "Eyinos", "Marathonas", "Mornos", "Yliki", "Synolo"]])
+        print(duplicate_rows[["Date", "Eyinos", "Marathonas", "Mornos", "Yliki", "Total"]])
 
     df_clean = (
         combined
@@ -121,7 +120,7 @@ def build_latest_dataset(historical_path: str, output_csv: str) -> pd.DataFrame:
     print(f"Rows fetched from RSS: {len(df_latest):,}")
     print(f"Rows after deduplication: {len(df_clean):,}")
     print(f"Latest date: {df_clean['Date'].max().date()}")
-    print(f"Latest total reserves: {df_clean.loc[df_clean['Date'].idxmax(), 'Synolo']:,} m³")
+    print(f"Latest total reserves: {df_clean.loc[df_clean['Date'].idxmax(), 'Total']:,} m³")
 
     return df_clean
 
